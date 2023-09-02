@@ -15,9 +15,7 @@ public class RecordNotFoundHandler {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
        RecordException recordException=  new RecordException(
                 e.getMessage(),
-                e,
-                HttpStatus.NOT_FOUND,
-                ZonedDateTime.now(ZoneId.of("Z"))
+               notFound
         );
 // 2. Return response entity
         return new ResponseEntity<>(recordException,notFound);

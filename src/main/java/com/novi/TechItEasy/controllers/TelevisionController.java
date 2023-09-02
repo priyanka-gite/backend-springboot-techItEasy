@@ -33,7 +33,7 @@ public class TelevisionController {
             Television t = tv.get(index);
             return new ResponseEntity<>(t, HttpStatus.OK);
         } else {
-            throw new RecordNotFoundException("Oops cannot find televisions " + index);
+            throw new RecordNotFoundException("Oops cannot find television " + index);
         }
     }
 
@@ -51,18 +51,18 @@ public class TelevisionController {
             updateTele.setBrandName(teleDetails.getBrandName());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            throw new RecordNotFoundException("Oops cannot find televisions " + index);
+            throw new RecordNotFoundException("Oops cannot find television " + index);
         }
     }
 
     @DeleteMapping("/televisions/{index}")
     public ResponseEntity<Television> deleteTelevision(@PathVariable int index) {
         if (index >= 0 && index < tv.size()) {
-            Television t = tv.get(index); // this i dont understand;
+            Television t = tv.get(index);
             tv.remove(t);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            throw new RecordNotFoundException("Oops cannot find televisions " + index);
+            throw new RecordNotFoundException("Oops cannot find television " + index);
         }
 
     }
