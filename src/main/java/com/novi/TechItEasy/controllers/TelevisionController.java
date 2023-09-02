@@ -1,5 +1,6 @@
 package com.novi.TechItEasy.controllers;
 
+import com.novi.TechItEasy.exceptions.RecordNotFoundException;
 import com.novi.TechItEasy.model.Television;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +30,10 @@ public class TelevisionController {
     @GetMapping("/televisions/{index}")
     public ResponseEntity getTelevision(@PathVariable int index) {
         if (index >= 0 && index < tv.size()) {
-            Television t = tv.get(index); // this i dont understand;
+            Television t = tv.get(index);
             return new ResponseEntity<>(t, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            throw new RecordNotFoundException("Oops cannot find televisions " + index);
         }
     }
 
@@ -41,19 +42,27 @@ public class TelevisionController {
         tv.add(newTelevison);
         return new ResponseEntity<>(newTelevison, HttpStatus.CREATED);
     }
-//    @PutMapping("/televisions/{index}")
-//    public ResponseEntity<Television> updateTelevision(@PathVariable int index, @RequestBody Television newTele) {
-//        if()
-//    }
+
+    @PutMapping("/televisions/{index}")
+    public ResponseEntity<Television> updateTelevision(@PathVariable int index, @RequestBody Television teleDetails) {
+        if (index >= 0 && index < tv.size()) {
+            Television updateTele = tv.get(index);
+            updateTele.setTeleType(teleDetails.getTeleType());
+            updateTele.setBrandName(teleDetails.getBrandName());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            throw new RecordNotFoundException("Oops cannot find televisions " + index);
+        }
+    }
 
     @DeleteMapping("/televisions/{index}")
-    public ResponseEntity<Television> deleteTelevision(@PathVariable int index, @RequestBody Television newTele) {
+    public ResponseEntity<Television> deleteTelevision(@PathVariable int index) {
         if (index >= 0 && index < tv.size()) {
             Television t = tv.get(index); // this i dont understand;
             tv.remove(t);
-            return new ResponseEntity<>(t, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            throw new RecordNotFoundException("Oops cannot find televisions " + index);
         }
 
     }
