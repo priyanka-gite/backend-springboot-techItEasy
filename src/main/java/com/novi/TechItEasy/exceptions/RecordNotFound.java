@@ -2,13 +2,11 @@ package com.novi.TechItEasy.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-import java.time.ZonedDateTime;
-
-public class RecordException {
+public class RecordNotFound {
     private final String message;
     private final HttpStatus httpStatus;
 
-    public RecordException(String message, HttpStatus httpStatus) {
+    public RecordNotFound(String message, HttpStatus httpStatus) {
         this.message = message;
         this.httpStatus = httpStatus;
     }
