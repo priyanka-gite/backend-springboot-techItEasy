@@ -1,4 +1,4 @@
-package com.novi.TechItEasy.exceptions;
+package com.novi.TechItEasy.exception;
 
 import org.springframework.http.HttpStatus;
 

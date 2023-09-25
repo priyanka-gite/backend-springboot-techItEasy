@@ -1,43 +1,41 @@
-package com.novi.TechItEasy.dtos;
-
-import com.novi.TechItEasy.model.Television;
-import jakarta.persistence.Column;
+package com.novi.TechItEasy.dto;
 
 public class TelevisionDto {
 
-    public Long id;
 
-    public String type;
+    private Long id;
 
-    public String brand;
+    private String type;
 
-    public String name;
+    private String brand;
 
-    public Double price;
+    private String name;
 
-    public Double availableSize;
+    private Double price;
 
-    public Double refreshRate;
+    private Double availableSize;
 
-    public String screenType;
+    private Double refreshRate;
 
-    public String screenQuality;
+    private String screenType;
 
-    public Boolean smartTv;
+    private String screenQuality;
 
-    public Boolean wifi;
+    private Boolean smartTv;
 
-    public Boolean voiceControl;
+    private Boolean wifi;
 
-    public Boolean hdr;
+    private Boolean voiceControl;
 
-    public Boolean bluetooth;
+    private Boolean hdr;
 
-    public Boolean ambiLight;
+    private Boolean bluetooth;
 
-    public Integer originalStock;
+    private Boolean ambiLight;
 
-    public Integer sold;
+    private Integer originalStock;
+
+    private Integer sold;
 
     public Long getId() {
         return id;

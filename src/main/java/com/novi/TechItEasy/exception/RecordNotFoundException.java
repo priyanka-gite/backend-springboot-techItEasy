@@ -1,4 +1,4 @@
-package com.novi.TechItEasy.exceptions;
+package com.novi.TechItEasy.exception;
 
 public class RecordNotFoundException extends RuntimeException {
     private String message;

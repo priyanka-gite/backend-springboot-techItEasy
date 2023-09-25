@@ -1,7 +1,8 @@
-package com.novi.TechItEasy.controllers;
+package com.novi.TechItEasy.controller;
 
-import com.novi.TechItEasy.dtos.TelevisionDto;
-import com.novi.TechItEasy.services.TelevisionServices;
+import com.novi.TechItEasy.dto.IdInputDto;
+import com.novi.TechItEasy.dto.TelevisionDto;
+import com.novi.TechItEasy.service.TelevisionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -20,10 +20,10 @@ import java.util.Optional;
 public class TelevisionController {
 
     //    SERVICE LAYER
-    @Autowired
-    private final TelevisionServices televisonService;
 
-    public TelevisionController(TelevisionServices televisonService) {
+    private final TelevisionService televisonService;
+
+    public TelevisionController(TelevisionService televisonService) {
         this.televisonService = televisonService;
     }
 
@@ -34,7 +34,8 @@ public class TelevisionController {
     public ResponseEntity<List<TelevisionDto>> getAllTelevisions() {
 
 //        storing ths result in a list of TelevisionDto;
-        List<TelevisionDto> televisions = televisonService.getTelevisions();
+        List<TelevisionDto> televisions;
+        televisions = televisonService.getTelevisions();
 //        return televisions;
         return ResponseEntity.ok(televisions);
     }
@@ -54,18 +55,22 @@ public class TelevisionController {
             televisonService.createTelevision(televisionDto);
             URI uri = URI.create(ServletUriComponentsBuilder.
                     fromCurrentRequest().
-                    path("/" + televisionDto.id).toUriString());
+                    path("/" + televisionDto.getId()).toUriString());
             return ResponseEntity.created(uri).body(televisionDto);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Optional<TelevisionDto>> deleteTelevision (@PathVariable Long id) {
-       televisonService.deleteTelevision(id);
-       return ResponseEntity.noContent().build();
+    public ResponseEntity<Optional<TelevisionDto>> deleteTelevision(@PathVariable Long id) {
+        televisonService.deleteTelevision(id);
+        return ResponseEntity.noContent().build();
     }
 
-
+    @PutMapping("/{id}/remotecontroller")
+    public ResponseEntity assignRemoteControlToTelevision(@PathVariable Long televisionId, @RequestBody IdInputDto input) {
+        televisonService.assignRemoteControllerToTelevision(televisionId, input.id);
+        return ResponseEntity.ok().build();
+    }
 
 
 //    @Autowired

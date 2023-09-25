@@ -1,12 +1,14 @@
-package com.novi.TechItEasy.services;
+package com.novi.TechItEasy.service;
 
-import com.novi.TechItEasy.dtos.TelevisionDto;
-import com.novi.TechItEasy.exceptions.RecordNotFoundException;
+import com.novi.TechItEasy.dto.RemoteControlDto;
+import com.novi.TechItEasy.dto.TelevisionDto;
+import com.novi.TechItEasy.exception.RecordNotFoundException;
+import com.novi.TechItEasy.model.RemoteControl;
 import com.novi.TechItEasy.model.Television;
+import com.novi.TechItEasy.repository.RemoteControlRepository;
 import com.novi.TechItEasy.repository.TelevisionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
@@ -14,21 +16,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TelevisionServices {
-
-    @Autowired
+public class TelevisionService {
 
     // CREATE INSTANCE OF TELE REPOSITORY
     private final TelevisionRepository televisionRepo;
+    private final RemoteControlRepository remoteControlRepository;
 
-    public TelevisionServices(TelevisionRepository televisionRepo) {
+    public TelevisionService(TelevisionRepository televisionRepo, RemoteControlRepository remoteControlRepository) {
         this.televisionRepo = televisionRepo;
+        this.remoteControlRepository = remoteControlRepository;
     }
 
     //    CREATE getTelevisions() METHOD THAT RETURNS THE LIST OF TELEVISIONDTO;
     public List<TelevisionDto> getTelevisions() {
-        List<Television> televisions = televisionRepo.findAll();
-        List<TelevisionDto> televisionDtos = new ArrayList<>();
+        List<Television> televisions;
+        televisions = televisionRepo.findAll();
+        List<TelevisionDto> televisionDtos;
+        televisionDtos = new ArrayList<>();
         for (Television television : televisions) {
             TelevisionDto televisionDto = convertTelevisionToTelevisionDto(television);
             televisionDtos.add(televisionDto);
@@ -63,7 +67,20 @@ public class TelevisionServices {
         }
     }
 
+    public void assignRemoteControllerToTelevision(Long televisionId, Long remoteControlId) {
+        Optional<Television> television = televisionRepo.findById(televisionId);
+        Optional<RemoteControl> remoteControl = remoteControlRepository.findById(remoteControlId);
+        if (television.isPresent() && remoteControl.isPresent()) {
+            Television tele = television.get();
+            RemoteControl remoteControl1 = remoteControl.get();
+            tele.setRemoteControl(remoteControl1);
+            televisionRepo.save(tele);
+        }else {
+            throw new RecordNotFoundException("Television or Remote Controller Not Found. Try again with new Id");
+        }
+    }
 
+//    ----------------CONVERSION---------------
 
     // CREATE convertTelevisionToTelevisionDto() METHOD THAT RETURNS TELEVISIONDTO
     private TelevisionDto convertTelevisionToTelevisionDto(Television televisionData) {
@@ -74,7 +91,7 @@ public class TelevisionServices {
 //        SET PROPERTIES IN DTO FROM televisionData;
         televisionDto.setId(televisionData.getId());
         televisionDto.setBluetooth(televisionData.getBluetooth());
-        televisionDto.setAvailableSize(televisionDto.availableSize);
+        televisionDto.setAvailableSize(televisionDto.getAvailableSize());
         televisionDto.setAmbiLight(televisionData.getAmbiLight());
         televisionDto.setBrand(televisionData.getBrand());
         televisionDto.setHdr(televisionData.getHdr());
@@ -112,9 +129,10 @@ public class TelevisionServices {
         newtelevision.setSmartTv(televisiondto.getSmartTv());
         newtelevision.setScreenType(televisiondto.getScreenType());
         newtelevision.setVoiceControl(televisiondto.getVoiceControl());
-
         return newtelevision;
     }
+
+//    To convert dto to entity id are still not made. once an for ex. television is created an id will be generated.
 
 
 }
