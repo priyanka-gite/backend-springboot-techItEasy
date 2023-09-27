@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "televisions")
 public class Television {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "type")
     private String type;
@@ -47,6 +47,19 @@ public class Television {
 
     @OneToOne
     private RemoteControl remoteControl;
+
+    //    is the owning side and also child class.
+    @ManyToOne
+    @JoinColumn(name = "cimodule_id")
+    private CiModule ciModule;
+
+    public CiModule getCiModule() {
+        return ciModule;
+    }
+
+    public void setCiModule(CiModule ciModule) {
+        this.ciModule = ciModule;
+    }
 
     public RemoteControl getRemoteControl() {
         return remoteControl;

@@ -2,12 +2,14 @@ package com.novi.TechItEasy.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "ci_modules")
 public class CiModule {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "name")
@@ -18,6 +20,23 @@ public class CiModule {
 
     @Column(name = "price")
     private Double price;
+
+    //    is the parent side
+    @OneToMany(mappedBy = "ciModule",
+            cascade = CascadeType.ALL)
+
+    private List<Television> televisions;
+
+    public List<Television> getTelevisions() {
+        return televisions;
+    }
+
+    public void setTelevisions(List<Television> televisions) {
+        this.televisions = televisions;
+        for (Television tele : televisions) {
+            tele.setCiModule(this);
+        }
+    }
 
     public Long getId() {
         return id;

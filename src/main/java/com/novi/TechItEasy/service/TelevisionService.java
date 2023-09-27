@@ -1,15 +1,14 @@
 package com.novi.TechItEasy.service;
 
-import com.novi.TechItEasy.dto.RemoteControlDto;
 import com.novi.TechItEasy.dto.TelevisionDto;
 import com.novi.TechItEasy.exception.RecordNotFoundException;
+import com.novi.TechItEasy.model.CiModule;
 import com.novi.TechItEasy.model.RemoteControl;
 import com.novi.TechItEasy.model.Television;
+import com.novi.TechItEasy.repository.CiModuleRepository;
 import com.novi.TechItEasy.repository.RemoteControlRepository;
 import com.novi.TechItEasy.repository.TelevisionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +20,12 @@ public class TelevisionService {
     // CREATE INSTANCE OF TELE REPOSITORY
     private final TelevisionRepository televisionRepo;
     private final RemoteControlRepository remoteControlRepository;
+    private final CiModuleRepository ciModuleRepository;
 
-    public TelevisionService(TelevisionRepository televisionRepo, RemoteControlRepository remoteControlRepository) {
+    public TelevisionService(TelevisionRepository televisionRepo, RemoteControlRepository remoteControlRepository, CiModuleRepository ciModuleRepository) {
         this.televisionRepo = televisionRepo;
         this.remoteControlRepository = remoteControlRepository;
+        this.ciModuleRepository = ciModuleRepository;
     }
 
     //    CREATE getTelevisions() METHOD THAT RETURNS THE LIST OF TELEVISIONDTO;
@@ -75,10 +76,23 @@ public class TelevisionService {
             RemoteControl remoteControl1 = remoteControl.get();
             tele.setRemoteControl(remoteControl1);
             televisionRepo.save(tele);
-        }else {
+        } else {
             throw new RecordNotFoundException("Television or Remote Controller Not Found. Try again with new Id");
         }
     }
+
+    public void assignCIModuleToTelevison(Long televisonId, Long ciModuleId) {
+        Optional<Television> television = televisionRepo.findById(televisonId);
+        Optional<CiModule> ciModule = ciModuleRepository.findById(ciModuleId);
+        if (television.isPresent() && ciModule.isPresent()) {
+            Television television1 = television.get();
+            television1.setCiModule(ciModule.get());
+            televisionRepo.save(television1);
+        } else {
+            throw new RecordNotFoundException("Television or CI module not found");
+        }
+    }
+
 
 //    ----------------CONVERSION---------------
 
@@ -91,7 +105,7 @@ public class TelevisionService {
 //        SET PROPERTIES IN DTO FROM televisionData;
         televisionDto.setId(televisionData.getId());
         televisionDto.setBluetooth(televisionData.getBluetooth());
-        televisionDto.setAvailableSize(televisionDto.getAvailableSize());
+        televisionDto.setAvailableSize(televisionData.getAvailableSize());
         televisionDto.setAmbiLight(televisionData.getAmbiLight());
         televisionDto.setBrand(televisionData.getBrand());
         televisionDto.setHdr(televisionData.getHdr());

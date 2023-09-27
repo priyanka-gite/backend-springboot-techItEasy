@@ -1,5 +1,9 @@
 package com.novi.TechItEasy.dto;
 
+import com.novi.TechItEasy.model.Television;
+
+import java.util.List;
+
 public class CiModuleDto {
 
     private Long id;
@@ -9,6 +13,16 @@ public class CiModuleDto {
     private String type;
 
     private Double price;
+
+    private List<Television> televisions;
+
+    public List<Television> getTelevisions() {
+        return televisions;
+    }
+
+    public void setTelevisions(List<Television> televisions) {
+        this.televisions = televisions;
+    }
 
     public Long getId() {
         return id;
